@@ -1,0 +1,69 @@
+Alarm episode 3075 (xgboost)
+Stream: 238 | Time: 2016-08-25 08:35:00 to 2016-08-25 08:35:00
+Priority: monitor | Reliability: low | FP risk: low
+Evidence: not_available
+Pattern: short_spike | Model agreement: 3/4
+Note: Use as supporting information for operator judgment; XAI describes model behavior, not physical causality.
+
+---
+
+Alarm episode 3354 (xgboost)
+Stream: 101 | Time: 2016-04-13 12:45:00 to 2016-04-13 13:15:00
+Priority: monitor | Reliability: low | FP risk: low
+Evidence: not_available
+Pattern: persistent | Model agreement: 2/4
+Note: Use as supporting information for operator judgment; XAI describes model behavior, not physical causality.
+
+---
+
+Alarm episode 2888 (xgboost)
+Stream: 197 | Time: 2016-07-09 08:35:00 to 2016-07-09 08:45:00
+Priority: monitor | Reliability: low | FP risk: low
+Evidence: not_available
+Pattern: borderline | Model agreement: 3/4
+Note: Use as supporting information for operator judgment; XAI describes model behavior, not physical causality.
+
+---
+
+Alarm episode 890 (lstm)
+Stream: 106 | Time: 2016-04-18 15:35:00 to 2016-04-18 15:35:00
+Priority: monitor | Reliability: low | FP risk: low
+Evidence: not_available
+Pattern: short_spike | Model agreement: 4/4
+Note: Use as supporting information for operator judgment; XAI describes model behavior, not physical causality.
+
+---
+
+Alarm episode 212 (lstm)
+Stream: 96 | Time: 2016-04-09 12:10:00 to 2016-04-09 12:20:00
+Priority: monitor | Reliability: low | FP risk: low
+Evidence: not_available
+Pattern: borderline | Model agreement: 3/4
+Note: Use as supporting information for operator judgment; XAI describes model behavior, not physical causality.
+
+---
+
+Alarm episode 3295 (xgboost)
+Stream: 360 | Time: 2016-11-21 18:15:00 to 2016-11-21 18:25:00
+Priority: monitor | Reliability: low | FP risk: low
+Evidence: not_available
+Pattern: recovering | Model agreement: 2/4
+Note: Use as supporting information for operator judgment; XAI describes model behavior, not physical causality.
+
+---
+
+Alarm episode 870 (lstm)
+Stream: 101 | Time: 2016-04-13 08:00:00 to 2016-04-13 08:05:00
+Priority: monitor | Reliability: low | FP risk: low
+Evidence: not_available
+Pattern: short_spike | Model agreement: 4/4
+Note: Use as supporting information for operator judgment; XAI describes model behavior, not physical causality.
+
+---
+
+Alarm episode 64 (lstm)
+Stream: 162 | Time: 2016-06-13 16:50:00 to 2016-06-13 16:50:00
+Priority: monitor | Reliability: low | FP risk: low
+Evidence: not_available
+Pattern: short_spike | Model agreement: 4/4
+Note: Use as supporting information for operator judgment; XAI describes model behavior, not physical causality.

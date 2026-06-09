@@ -1,0 +1,69 @@
+\relax 
+\providecommand\hyper@newdestlabel[2]{}
+\providecommand\HyField@AuxAddToFields[1]{}
+\providecommand\HyField@AuxAddToCoFields[2]{}
+\citation{abujudom2025}
+\@writefile{toc}{\contentsline {section}{Abstract}{1}{Doc-Start}\protected@file@percent }
+\citation{abujudom2025}
+\@writefile{toc}{\contentsline {section}{\numberline {1}Introduction}{2}{section.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {2}Dataset and Experimental Setup}{2}{section.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.1}Data Source}{2}{subsection.2.1}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces Dataset overview.}}{2}{table.caption.1}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces End-to-end project workflow from prepared incident files to operator-facing alarm classification.}}{3}{figure.caption.2}\protected@file@percent }
+\providecommand*\caption@xref[2]{\@setref\relax\@undefined{#1}}
+\newlabel{fig:project_pipeline}{{1}{3}{End-to-end project workflow from prepared incident files to operator-facing alarm classification}{figure.caption.2}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Incident-window protocol. Each stream contains a 240-hour incident-free baseline window followed by a 12-hour test window containing the labeled target incident period.}}{3}{figure.caption.3}\protected@file@percent }
+\newlabel{fig:incident_window_protocol}{{2}{3}{Incident-window protocol. Each stream contains a 240-hour incident-free baseline window followed by a 12-hour test window containing the labeled target incident period}{figure.caption.3}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.2}Splitting Protocol}{3}{subsection.2.2}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces Cross-validation design.}}{3}{table.caption.4}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Five-fold stream-level cross-validation. The 175 streams are split into five groups of 35 streams, and each group is held out once. }}{4}{figure.caption.5}\protected@file@percent }
+\newlabel{fig:stream_cv}{{3}{4}{Five-fold stream-level cross-validation. The 175 streams are split into five groups of 35 streams, and each group is held out once}{figure.caption.5}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {3}Model Setup}{4}{section.3}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {3}{\ignorespaces Models and explanation methods.}}{4}{table.caption.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {4}Evaluation Metrics}{4}{section.4}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Timestamp-level precision, recall, and F1-score for the final model outputs.}}{5}{figure.caption.7}\protected@file@percent }
+\newlabel{fig:timestamp_level_comparison}{{4}{5}{Timestamp-level precision, recall, and F1-score for the final model outputs}{figure.caption.7}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces Incident-level model comparison using Detection Rate, False Alarm Rate, and Mean Time to Detection. }}{5}{figure.caption.8}\protected@file@percent }
+\newlabel{fig:incident_level_comparison}{{5}{5}{Incident-level model comparison using Detection Rate, False Alarm Rate, and Mean Time to Detection}{figure.caption.8}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {4}{\ignorespaces Incident-level evaluation values.}}{5}{table.caption.9}\protected@file@percent }
+\newlabel{tab:incident_values}{{4}{5}{Incident-level evaluation values}{table.caption.9}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces Per-fold timestamp recall stability. }}{6}{figure.caption.10}\protected@file@percent }
+\newlabel{fig:fold_stability}{{6}{6}{Per-fold timestamp recall stability}{figure.caption.10}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {5}Alarm Episode Classification Layer}{6}{section.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.1}Timestamp Predictions to Alarm Episodes}{6}{subsection.5.1}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces Example alarm timeline showing smoothed speed, smoothed occupancy, labeled incident period, and alarm-positive timestamps from the models.}}{6}{figure.caption.11}\protected@file@percent }
+\newlabel{fig:example_alarm_timeline}{{7}{6}{Example alarm timeline showing smoothed speed, smoothed occupancy, labeled incident period, and alarm-positive timestamps from the models}{figure.caption.11}{}}
+\citation{shap}
+\citation{lime}
+\@writefile{lof}{\contentsline {figure}{\numberline {8}{\ignorespaces Grouping timestamp-level alarm predictions into one alarm episode. The representative row summarizes the episode for XAI and operator review.}}{7}{figure.caption.12}\protected@file@percent }
+\newlabel{fig:timestamp_to_episode}{{8}{7}{Grouping timestamp-level alarm predictions into one alarm episode. The representative row summarizes the episode for XAI and operator review}{figure.caption.12}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {6}Explainable AI Methodology}{7}{section.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.1}Role of XAI in This Project}{7}{subsection.6.1}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {5}{\ignorespaces Non-XAI and XAI evidence used for alarm classification.}}{7}{table.caption.13}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.2}SHAP}{7}{subsection.6.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.3}LIME}{7}{subsection.6.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.4}Temporal Evidence Metrics}{7}{subsection.6.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {7}Cross-Fold XAI Evidence Analysis}{8}{section.7}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {9}{\ignorespaces SHAP-style feature influence summary across all alarm episode representative rows.}}{8}{figure.caption.14}\protected@file@percent }
+\newlabel{fig:shap_beeswarm}{{9}{8}{SHAP-style feature influence summary across all alarm episode representative rows}{figure.caption.14}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {10}{\ignorespaces Temporal attribution heatmap across all alarm episodes. The figure shows whether model explanations are mainly based on recent traffic evidence, mid-range evidence, or older traffic history.}}{9}{figure.caption.15}\protected@file@percent }
+\newlabel{fig:temporal_xai_heatmap}{{10}{9}{Temporal attribution heatmap across all alarm episodes. The figure shows whether model explanations are mainly based on recent traffic evidence, mid-range evidence, or older traffic history}{figure.caption.15}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {6}{\ignorespaces Mean XAI evidence metrics by model and explanation method.}}{9}{table.caption.16}\protected@file@percent }
+\newlabel{tab:xai_evidence_summary}{{6}{9}{Mean XAI evidence metrics by model and explanation method}{table.caption.16}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {8}Comparative XAI Analysis}{10}{section.8}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.1}Cross-Method and Cross-Model Agreement}{10}{subsection.8.1}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {11}{\ignorespaces Cross-model explanation agreement heatmap. Higher agreement means different model families explain shared alarm cases using similar temporal traffic evidence.}}{10}{figure.caption.17}\protected@file@percent }
+\newlabel{fig:cross_model_heatmap}{{11}{10}{Cross-model explanation agreement heatmap. Higher agreement means different model families explain shared alarm cases using similar temporal traffic evidence}{figure.caption.17}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {12}{\ignorespaces Cross-model explanation agreement levels. The chart summarizes how often model pairs produce consistent, partially consistent, or conflicting explanations.}}{11}{figure.caption.18}\protected@file@percent }
+\newlabel{fig:cross_model_levels}{{12}{11}{Cross-model explanation agreement levels. The chart summarizes how often model pairs produce consistent, partially consistent, or conflicting explanations}{figure.caption.18}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {9}Operator-Facing Alarm Evidence}{11}{section.9}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {13}{\ignorespaces Strong versus borderline alarm profiles.}}{12}{figure.caption.19}\protected@file@percent }
+\newlabel{fig:strong_borderline_profiles}{{13}{12}{Strong versus borderline alarm profiles}{figure.caption.19}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {10}Discussion}{12}{section.10}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {10.1}Operational Value}{12}{subsection.10.1}\protected@file@percent }
+\bibcite{abujudom2025}{1}
+\bibcite{lime}{2}
+\bibcite{shap}{3}
+\@writefile{toc}{\contentsline {section}{\numberline {11}Limitations}{13}{section.11}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {12}Conclusion}{13}{section.12}\protected@file@percent }
+\gdef \@abspage@last{14}

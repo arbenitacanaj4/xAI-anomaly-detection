@@ -1,0 +1,19 @@
+Strong multi-model alarm review case: stream 50, fold 1
+
+Alarm time: 2016-02-20 19:45:00
+Source file: incident_50.csv
+Representative row_id: 24130
+Model agreement: 4/4 models alarmed at this timestamp
+Peak normalized score: 0.898
+
+Operator-facing interpretation:
+From an operator viewpoint, this alarm is review-worthy because the models detected abnormal-looking local traffic context. The strongest evidence is concentrated around the last 5-15 minutes before the alarm, especially recent speed behavior, with supporting occupancy context. This does not prove an incident, but it gives the operator a reason to check camera, map, or sensor conditions.
+
+Evidence quality:
+- Strong alarm relative to threshold: all four model scores are well above their thresholds.
+- High model agreement: 4/4 models alarmed at the representative timestamp.
+- Explanation is reasonably concentrated: the strongest local evidence includes immediate 5-minute speed behavior, with occupancy also contributing.
+- Temporal context is operationally useful: the alarm is linked to recent local traffic behavior rather than only old history.
+
+Operator-facing note:
+The useful XAI message is not the raw feature name `speed_t_minus_1`. It is that recent local traffic behavior, especially speed at the previous 5-minute step, made several models treat this timestamp as abnormal. XAI explains why the models reacted; it does not prove the physical cause.
