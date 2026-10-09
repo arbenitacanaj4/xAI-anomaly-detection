@@ -1,28 +1,33 @@
-"""Central configuration for the NITA XAI pipeline."""
+"""Central configuration for the traffic incident XAI pipeline."""
 
 from __future__ import annotations
 
 from pathlib import Path
 
-PROJECT_ROOT = Path(__file__).resolve().parents[1]
-NITA_ROOT = PROJECT_ROOT / "nita_xai"
+PACKAGE_ROOT = Path(__file__).resolve().parent
+PROJECT_ROOT = PACKAGE_ROOT.parent
+EXTERNAL_DATA_ROOT = PROJECT_ROOT.parent / "data"
 
 RAW_SEARCH_DIRS = (
     PROJECT_ROOT / "data" / "raw",
     PROJECT_ROOT / "data" / "incident_files" / "raw",
+    EXTERNAL_DATA_ROOT / "raw",
+    EXTERNAL_DATA_ROOT / "incident_files" / "raw",
 )
 SMOOTHED_SEARCH_DIRS = (
     PROJECT_ROOT / "data" / "processed",
     PROJECT_ROOT / "data" / "incident_files" / "smoothed",
+    EXTERNAL_DATA_ROOT / "processed",
+    EXTERNAL_DATA_ROOT / "incident_files" / "smoothed",
 )
 
-DATA_DIR = NITA_ROOT / "data"
+DATA_DIR = PROJECT_ROOT / "data"
 PROCESSED_DIR = DATA_DIR / "processed"
-MODELS_DIR = NITA_ROOT / "models"
-EXPLANATIONS_DIR = NITA_ROOT / "explanations"
-REPORTS_DIR = NITA_ROOT / "reports"
-NOTEBOOKS_DIR = NITA_ROOT / "notebooks"
-RESULTS_DIR = NITA_ROOT / "results"
+MODELS_DIR = PROJECT_ROOT / "models"
+EXPLANATIONS_DIR = PROJECT_ROOT / "explanations"
+REPORTS_DIR = PROJECT_ROOT / "reports"
+NOTEBOOKS_DIR = PROJECT_ROOT / "notebooks"
+RESULTS_DIR = PROJECT_ROOT / "results"
 TABLES_DIR = RESULTS_DIR / "tables"
 FIGURES_DIR = RESULTS_DIR / "figures"
 XAI_FIGURES_DIR = FIGURES_DIR / "xai"
@@ -50,6 +55,21 @@ THESIS_STYLE_MODEL_METRICS_PATH = TABLES_DIR / "thesis_style_model_metrics.csv"
 ALARM_EPISODE_TRIAGE_PATH = TABLES_DIR / "alarm_episode_triage.csv"
 FALSE_ALARM_TRIAGE_PATH = TABLES_DIR / "false_alarm_triage.csv"
 ALARM_CARD_EXAMPLES_PATH = ALARM_CARDS_DIR / "alarm_card_examples.txt"
+
+
+def resolve_existing_path(path_like: str | Path) -> Path:
+    """Resolve saved artifact paths after repository-folder renames."""
+
+    path = Path(path_like)
+    if path.exists():
+        return path
+    parts = path.parts
+    for anchor in ("models", "results", "data"):
+        if anchor in parts:
+            candidate = PROJECT_ROOT.joinpath(*parts[parts.index(anchor) :])
+            if candidate.exists():
+                return candidate
+    return path
 
 RANDOM_STATE = 42
 N_FOLDS = 5

@@ -9,7 +9,7 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-from nita_xai import config
+from traffic_incident_xai import config
 
 
 def load_manifest(prefer_final: bool = True) -> list[dict[str, object]]:
@@ -96,7 +96,7 @@ def load_all_predictions() -> pd.DataFrame:
     identity = load_dataset_identity()
     frames = []
     for record in load_manifest():
-        score_path = Path(str(record["score_path"]))
+        score_path = config.resolve_existing_path(str(record["score_path"]))
         if score_path.exists():
             frames.append(normalize_prediction_file(score_path, identity))
     if not frames:
@@ -187,8 +187,15 @@ def operator_priority(reliability: str, risk: str) -> str:
 def load_xai_support() -> pd.DataFrame:
     """Load row/model XAI support and agreement summaries when available."""
 
+    support_columns = [
+        "row_id",
+        "model",
+        "dominant_xai_features",
+        "explanation_support_score",
+        "explanation_agreement_level",
+    ]
     if not config.XAI_LOCAL_EXPLANATIONS_PATH.exists():
-        return pd.DataFrame()
+        return pd.DataFrame(columns=support_columns)
     local = pd.read_csv(config.XAI_LOCAL_EXPLANATIONS_PATH)
     grouped = (
         local.groupby(["row_id", "model"])
@@ -215,10 +222,12 @@ def load_xai_support() -> pd.DataFrame:
             on=["row_id", "model"],
             how="left",
         )
+    if "explanation_agreement_level" not in grouped.columns:
+        grouped["explanation_agreement_level"] = "not_available"
     grouped["explanation_agreement_level"] = grouped[
         "explanation_agreement_level"
     ].fillna("not_available")
-    return grouped
+    return grouped[support_columns]
 
 
 def incident_episode_summary(identity: pd.DataFrame) -> pd.DataFrame:
