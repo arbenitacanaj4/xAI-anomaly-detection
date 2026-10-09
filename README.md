@@ -1,141 +1,233 @@
-# NITA XAI: Traffic Incident Alarm Triage
+# XAI-Based Alarm Classification for High-Recall Traffic Incident Detection
 
-This folder contains the final project implementation for an XAI-based traffic incident alarm triage experiment.
+This repository contains my Project Laboratory work at the Budapest University of Technology and Economics.
 
-The project uses prepared traffic incident-window data from the referenced thesis as the data and protocol foundation. It does not reproduce the whole thesis pipeline. The focus here is narrower:
+The project studies how Explainable Artificial Intelligence can add context to traffic incident alarms. Instead of treating a model output as only an alarm or no-alarm decision, the pipeline groups consecutive detections into alarm episodes and examines the traffic evidence behind each episode.
 
-> build high-recall traffic anomaly alarms, then use XAI and temporal context to help an operator judge the alarm evidence.
+The aim is not to use XAI to prove the physical cause of an incident. The explanations are used to show which recent speed and occupancy patterns influenced the models, giving an operator more information when deciding which alarms deserve attention.
 
-XAI is used to explain model behavior, not to prove the physical cause of an incident.
+The full project report is available in [`paper.pdf`](paper.pdf).
 
-## What the Pipeline Does
+## Problem
 
-1. Consolidates 175 selected incident streams into one processed dataset.
-2. Keeps the protocol of 240 hours of incident-free baseline data and 12 hours of test data per stream.
-3. Splits whole streams into 5 folds, with 35 streams per fold.
-4. Trains four model families:
-   - Random Forest
-   - XGBoost
-   - MLP
-   - LSTM
-5. Produces anomaly scores, calibrated high-recall thresholds, and timestamp-level predictions.
-6. Groups consecutive positive predictions into alarm episodes.
-7. Computes XAI for alarm episode representative rows across all folds.
-8. Summarizes alarm evidence for report figures and operator-facing triage.
+Traffic incident detection systems are often designed for high recall because missing an incident can be costly. A consequence is that some alarms will occur outside the labeled incident period.
 
-## Main Data Assumptions
+A binary alarm alone does not explain whether the model reacted to a clear recent traffic change or to weaker, less consistent evidence.
 
-- One stream corresponds to one selected incident-window timeline.
-- Each stream has 2880 baseline rows and 144 test rows.
-- Sampling interval is 5 minutes.
-- Model inputs are:
-  - `speed_smoothed`
-  - `occ_smoothed`
-- EWMA smoothing was validated with alpha `0.15`.
-- Labels are used for offline evaluation, not as information available to the operator in real time.
+This project investigates whether model explanations and temporal traffic context can provide a more useful description of an alarm.
 
-## Important Files
+The main research question was:
 
-| File | Purpose |
-|---|---|
-| `config.py` | Central paths and project settings. |
-| `data_pipeline.py` | Loads incident CSVs, validates smoothing, builds `training_dataset.csv`, and assigns folds. |
-| `model_training.py` | Trains RF, XGBoost, MLP, and LSTM models and saves final model outputs. |
-| `triage.py` | Combines predictions, groups timestamp alarms into episodes, and creates operator triage tables. |
-| `xai_alarm_episodes.py` | Computes all-episode XAI explanations and agreement metrics. |
-| `report_outputs.py` | Generates report-ready figures used by notebook 06 and the report. |
-| `interpreter.py` | Prototype diagnostic wording from attribution patterns. |
+> How can XAI methods and temporal traffic context be combined to provide traffic operators with useful supporting information for judging incident alarms?
 
-## Important Folders
+## Dataset
 
-| Folder | Purpose |
-|---|---|
-| `data/processed/` | Consolidated dataset and data validation outputs. |
-| `models/final/` | Final trained model files and fold score CSVs. |
-| `results/predictions/` | Combined prediction tables used by XAI and triage. |
-| `results/tables/` | Final metrics, thresholds, XAI tables, and triage tables. |
-| `results/figures/report/` | Report-ready PNG figures and figure manifest. |
-| `results/alarm_cards/` | Example operator-facing alarm card text. |
-| `notebooks/` | Restartable notebooks for explanation, inspection, and final report outputs. |
+The experiments use prepared traffic incident-window data based on the framework of previous work at BME.
 
-## Final Outputs to Know
+The processed dataset contains:
 
-Training and evaluation:
+- 175 selected incident streams
+- 240 hours of incident-free baseline data per stream
+- 12 hours of test data per stream
+- 5-minute sampling intervals
+- 529,200 rows in total
+- smoothed speed and occupancy as model inputs
+- EWMA smoothing with `alpha = 0.15`
 
-- `results/tables/final_model_metrics.csv`
-- `results/tables/final_model_comparison.csv`
-- `results/tables/final_thresholds.csv`
-- `results/tables/thesis_style_model_metrics.csv`
-- `models/final_training_manifest.json`
+Each stream is kept intact during cross-validation. The 175 streams are divided into five folds of 35 streams so that traffic from a held-out stream does not appear in the corresponding training set.
 
-Predictions and triage:
+The source traffic data and large generated model files are not stored in this repository.
 
-- `results/predictions/all_model_predictions.csv`
-- `results/tables/incident_level_detection.csv`
-- `results/tables/incident_episode_summary.csv`
-- `results/tables/alarm_episode_triage.csv`
-- `results/tables/false_alarm_triage.csv`
+## Approach
 
-XAI:
+The models are used as anomaly detectors rather than standard supervised incident classifiers.
 
-- `results/tables/xai_alarm_episode_targets.csv`
-- `results/tables/xai_alarm_episode_coverage.csv`
-- `results/tables/xai_local_explanations_all_alarm_episodes.csv`
-- `results/tables/xai_alarm_evidence_metrics.csv`
-- `results/tables/xai_method_agreement_all_alarm_episodes.csv`
-- `results/tables/xai_cross_model_agreement_all_alarm_episodes.csv`
+They learn normal traffic behaviour from incident-free baseline data. During testing, the difference between predicted and observed traffic conditions is converted into an anomaly score. Scores above a calibrated threshold produce an alarm.
 
-Report figures:
+A 60-minute lookback window is used, consisting of 12 five-minute observations of:
 
-- `results/figures/report/report_figure_manifest.csv`
-- `results/figures/report/*.png`
+- `speed_smoothed`
+- `occ_smoothed`
 
-## Notebooks
+Four model families are compared:
 
-| Notebook | Purpose |
-|---|---|
-| `01_data_label_check.ipynb` | Explains the data source, 175 streams, windows, labels, and incident durations. |
-| `02_model_training_tuning.ipynb` | Explains model families, thresholds, debug vs final training, and final metrics. |
-| `03_lstm_sequence_model.ipynb` | Explains LSTM sequence construction and stream-boundary safety. |
-| `04_xai_model_explanations.ipynb` | Explains SHAP/LIME/sequence XAI and agreement outputs. |
-| `05_alarm_triage_layer.ipynb` | Explains timestamp predictions vs alarm episodes and operator triage. |
-| `06_report_outputs.ipynb` | Generates and displays final report-ready figures. |
+| Model | Input | Explanation |
+| --- | --- | --- |
+| Random Forest | Flattened temporal window | TreeSHAP, LIME-style local surrogate |
+| XGBoost | Flattened temporal window | TreeSHAP, LIME-style local surrogate |
+| MLP | Flattened temporal window | DeepSHAP-style attribution, LIME-style local surrogate |
+| LSTM | Sequential temporal window | Sequence DeepSHAP-style attribution |
 
-## Common Commands
+## Alarm episodes
 
-Run data consolidation and validation:
+The models produce one prediction every five minutes, but several consecutive positive predictions usually represent the same operational alarm.
 
-```bash
-python -m nita_xai.data_pipeline
+The pipeline therefore groups consecutive positive timestamps into **alarm episodes**.
+
+One representative timestamp from each episode is selected for explanation. The triage layer combines model output with information such as:
+
+- anomaly score and threshold margin
+- alarm duration
+- number of models alarming
+- recent attribution share
+- explanation concentration
+- agreement between explanation methods
+- agreement between different model families
+
+This produces an evidence profile rather than automatically labeling an alarm as true or false.
+
+## Results
+
+Two evaluation views are used.
+
+Timestamp-level evaluation measures precision, recall and F1-score for individual five-minute predictions. Incident-level evaluation measures whether an incident was detected at least once, the false alarm rate outside labeled incident periods, and mean time to detection.
+
+The final incident-level results reported in the project were:
+
+| Model | Detection Rate | False Alarm Rate | Mean Time to Detection |
+| --- | ---: | ---: | ---: |
+| Random Forest | 0.994 | 0.0583 | 0.686 min |
+| XGBoost | 1.000 | 0.0579 | 1.086 min |
+| MLP | 0.983 | 0.0580 | 0.724 min |
+| LSTM | 0.994 | 0.0499 | 0.544 min |
+
+The XAI analysis showed that temporal information was more informative than simply asking whether speed or occupancy was more important.
+
+For example, the mean share of attribution assigned to the most recent 0–15 minutes was:
+
+| Model / explanation | Recent attribution share |
+| --- | ---: |
+| Random Forest / TreeSHAP | 0.987 |
+| XGBoost / TreeSHAP | 0.967 |
+| LSTM / Sequence DeepSHAP | 0.977 |
+
+The LIME-style explanations were generally more distributed across the full 60-minute lookback window. This difference between explanation methods became part of the analysis rather than treating one explanation as ground truth.
+
+## Project structure
+
+```text
+traffic_incident_xai/
+├── config.py
+├── data_pipeline.py
+├── model_training.py
+├── triage.py
+├── xai_alarm_episodes.py
+├── interpreter.py
+└── report_outputs.py
+
+notebooks/
+├── 01_data_label_check.ipynb
+├── 02_model_training_tuning.ipynb
+├── 03_lstm_sequence_model.ipynb
+├── 04_xai_model_explanations.ipynb
+├── 05_alarm_triage_layer.ipynb
+└── 06_report_outputs.ipynb
+
+tests/
+└── test_core_behaviors.py
+
+results/
+└── figures/
+
+paper.pdf
+paper.tex
+requirements.txt
 ```
 
-Run final training locally:
+Large datasets, trained models, prediction tables and generated CSV outputs are kept outside version control.
+
+## Setup
+
+The project has been tested with Python 3.11.
+
+Create a virtual environment:
 
 ```bash
-python -m nita_xai.model_training --run-mode final --models random_forest xgboost mlp lstm --folds 1 2 3 4 5 --epochs 30 --early-stopping
+python -m venv .venv
 ```
 
-Build episode-level triage outputs:
+On Windows PowerShell:
+
+```powershell
+.\.venv\Scripts\Activate.ps1
+```
+
+Install the dependencies:
 
 ```bash
-python -m nita_xai.triage
+python -m pip install -r requirements.txt
 ```
 
-Build all-alarm XAI tables:
+The data-processing and training commands require the prepared incident CSV files to be available in the configured data directories.
+
+## Running the pipeline
+
+Build and validate the consolidated dataset:
 
 ```bash
-python -m nita_xai.xai_alarm_episodes
+python -m traffic_incident_xai.data_pipeline
 ```
 
-Generate report figures:
+Run the final five-fold training:
 
 ```bash
-python -c "from nita_xai import report_outputs as r; r.build_all_report_figures()"
+python -m traffic_incident_xai.model_training --run-mode final --folds 1 2 3 4 5 --epochs 30 --batch-size 512
 ```
 
-## Notes
+Build alarm episodes and triage outputs:
 
-- The final manifest is `models/final_training_manifest.json`.
-- The project should use final outputs under `models/final/` and `results/`.
-- The old intermediate `explanations/` folder was removed because final XAI tables are stored under `results/tables/`.
-- False alarms are not treated as useless. They are analyzed as alarm episodes so the operator can judge their evidence quality.
+```bash
+python -m traffic_incident_xai.triage
+```
+
+Check XAI coverage:
+
+```bash
+python -m traffic_incident_xai.xai_alarm_episodes --status
+```
+
+Compute missing alarm-episode explanations:
+
+```bash
+python -m traffic_incident_xai.xai_alarm_episodes --compute-missing
+```
+
+Build the XAI summary and agreement tables:
+
+```bash
+python -m traffic_incident_xai.xai_alarm_episodes --build-tables
+```
+
+Generate the report figures:
+
+```bash
+python -c "from traffic_incident_xai import report_outputs as r; r.build_all_report_figures()"
+```
+
+## Tests
+
+The repository includes a small synthetic test suite for the core pipeline behaviour, including stream boundaries, temporal window construction, fold assignment, anomaly scoring, threshold calibration and alarm episode grouping.
+
+Run it with:
+
+```bash
+python -m unittest discover -s tests -v
+```
+
+## Limitations
+
+The models only receive smoothed speed and occupancy, so the explanations cannot provide evidence from variables that were not part of the model input.
+
+The LSTM is explained using sequence attribution rather than the LIME-style local surrogate used for the flattened models, since independently perturbing values in an ordered sequence can produce unrealistic temporal inputs.
+
+XAI is also calculated for one representative timestamp per alarm episode. This provides a compact explanation of the alarm but does not show how feature attribution changes throughout the entire episode.
+
+Most importantly, the explanations describe model behaviour. They should not be interpreted as proof of the physical cause of a traffic incident.
+
+## Project report
+
+A detailed discussion of the experimental setup, evaluation, XAI analysis and operator-facing alarm evidence is available in:
+
+[`paper.pdf`](paper.pdf)
+
+The project was completed as part of the BSc Computer Engineering Project Laboratory at the Budapest University of Technology and Economics.
