@@ -21,8 +21,8 @@ import pandas as pd
 import shap
 from sklearn.linear_model import Ridge
 
-from nita_xai import config
-from nita_xai.model_training import (
+from traffic_incident_xai import config
+from traffic_incident_xai.model_training import (
     StationLstmRegressor,
     TabularMlpRegressor,
     flatten_windows,

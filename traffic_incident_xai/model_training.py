@@ -20,8 +20,8 @@ from sklearn.metrics import (
 )
 from sklearn.preprocessing import StandardScaler
 
-from nita_xai import config
-from nita_xai.data_pipeline import consolidate_dataset
+from traffic_incident_xai import config
+from traffic_incident_xai.data_pipeline import consolidate_dataset
 
 try:
     from xgboost import XGBRegressor

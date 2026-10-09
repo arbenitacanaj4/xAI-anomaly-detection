@@ -15,7 +15,7 @@ from matplotlib import patches
 import numpy as np
 import pandas as pd
 
-from nita_xai import config
+from traffic_incident_xai import config
 
 
 MODEL_ORDER = ["random_forest", "xgboost", "mlp", "lstm"]

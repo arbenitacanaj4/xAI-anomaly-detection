@@ -12,7 +12,7 @@ from typing import Iterable
 import numpy as np
 import pandas as pd
 
-from nita_xai import config
+from traffic_incident_xai import config
 
 
 @dataclass(frozen=True)
@@ -33,7 +33,7 @@ class StreamSplit:
 
 
 def ensure_directories() -> None:
-    """Create isolated NITA output folders."""
+    """Create isolated output folders."""
 
     for path in (
         config.PROCESSED_DIR,
